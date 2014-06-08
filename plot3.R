@@ -1,0 +1,15 @@
+plot3 <- function(){
+    power <- read.table('household_power_consumption.txt', header = TRUE, sep = ';', na.strings = '?')
+    power.split <- split(power, power$Date)
+    power.use <- rbind(power.split$'1/2/2007', power.split$'2/2/2007')
+    power.use$Date <- as.POSIXct(power.use$Date, format = '%d/%m/%Y')
+    xaxis <- paste(power.use$Date, power.use$Time)
+    xaxis <- as.POSIXct(xaxis)
+    Sys.setlocale("LC_TIME", "C")
+    png('plot3.png')
+    plot(xaxis, power.use$Sub_metering_1, type = 'l', xlab = '', ylab = 'Energy sub metering')
+    lines(xaxis, power.use$Sub_metering_2, type = 'l', col = 'red')
+    lines(xaxis, power.use$Sub_metering_3, type = 'l', col = 'blue')
+    legend('topright', legend = c('Sub_metering_1','Sub_metering_2','Sub_metering_3'), lty = 1, col = c('black','red','blue'), cex = 0.7, y.intersp = 0.6)
+    dev.off()
+}
